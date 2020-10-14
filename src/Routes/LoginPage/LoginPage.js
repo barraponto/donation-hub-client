@@ -1,18 +1,24 @@
-import React from 'react';
-import LoginForm from '../../Components/LoginForm/LoginForm';
+import React, { Component } from 'react'
+import './LoginPage.css';
+import LoginForm2 from '../../components/LoginForm2/LoginForm2';
 
-const LoginPage = (props) => {
-    const handleSuccessfulLogin = () => {
-        const {history} = props
-        history.push('/dashboard')
+class LoginPage extends Component {
 
-        if(props.onLogin) {
-            props.onLogin(true);
-        }
-    }
+    static defaultProps = {
+        location: {},
+        history: {
+          push: () => { },
+        },
+      }
+    handleLoginSuccess = () => {
+        const { location, history } = this.props
+        const destination = (location.state || {}).from || '/'
+        history.push(destination)
+    }  
 
-    return (
-        <div className="loginPageDisplay">
+    render() {
+        return(
+            <div className="loginPageDisplay">
             <div className="loginHeader">
                 <h1>Donation Hub</h1>
             </div>
@@ -20,19 +26,13 @@ const LoginPage = (props) => {
                 Become a Community Champion
             </div>
             <section className="loginBody">
-                <LoginForm
-                    // onSuccessfulLogin={handleSuccessfulLogin}
+                <LoginForm2
+                    onSuccessfulLogin={this.handleLoginSuccess}
                     />
             </section>
         </div>
-    )
+        );
+    }
 }
 
-LoginPage.defaultProps = {
-    location: {},
-    history: {
-        push: () => {},
-    },
-}
-
-export default LoginPage;
+export default LoginPage

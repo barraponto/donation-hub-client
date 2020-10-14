@@ -12,31 +12,28 @@ const TokenService = {
     return window.localStorage.getItem(config.TOKEN_KEY)
   },
   clearAuthToken() {
-    console.info('clearing the auth token')
     window.localStorage.removeItem(config.TOKEN_KEY)
   },
   hasAuthToken() {
     return !!TokenService.getAuthToken()
   },
-  makeBasicAuthToken(userName, password) {
-    return window.btoa(`${userName}:${password}`)
-  },
   parseJwt(jwt) {
     return jwtDecode(jwt)
   },
-  readJwtToken() {
-    return TokenService.parseJwt(TokenService.getAuthToken())
+  parseAuthToken() {
+    const authToken = TokenService.getAuthToken()
+    if (authToken)
+      return TokenService.parseJwt(authToken)
+    else
+      return undefined
   },
   _getMsUntilExpiry(payload) {
-  
     return (payload.exp * 1000) - Date.now()
   },
   queueCallbackBeforeExpiry(callback) {
- 
     const msUntilExpiry = TokenService._getMsUntilExpiry(
-      TokenService.readJwtToken()
+      TokenService.parseAuthToken()
     )
- 
     _timeoutId = setTimeout(callback, msUntilExpiry - _TEN_SECONDS_IN_MS)
   },
   clearCallbackBeforeExpiry() {

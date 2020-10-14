@@ -1,15 +1,23 @@
-import React from 'react';
+import React, { Component } from 'react'
 import './RegistrationPage.css';
-import RegistrationForm from '../../Components/RegistrationForm/RegistrationForm';
+import RegistrationForm from '../../components/RegistrationForm/RegistrationForm';
 
+class RegistrationPage extends Component {
 
-const RegistrationPage = (props) => {
-    const handleRegistrationSuccess = user => {
-        const {history} = props
+    static defaultProps = {
+        history: {
+          push: () => {},
+        },
+    }
+
+    handleRegistrationSuccess = () => {
+        const { history } = this.props
         history.push('/login')
     }
 
-    return (
+    render() {
+
+        return(
         <>
         <div className="registrationHeader">
             Become A Community Champion
@@ -17,18 +25,13 @@ const RegistrationPage = (props) => {
 
         <section className="registrationBody">
             <RegistrationForm
-                onRegistrationSuccess={handleRegistrationSuccess}
+                onRegistrationSuccess={this.handleRegistrationSuccess}
             />
         </section>
 
         </>
-    );
-};
-
-RegistrationPage.defaultProps = {
-    history: {
-        push: () => {},
-    },
+        );
+    }
 }
 
 export default RegistrationPage
